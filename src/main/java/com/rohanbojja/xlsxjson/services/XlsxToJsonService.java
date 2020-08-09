@@ -20,8 +20,7 @@ public class XlsxToJsonService {
     Gson gson;
 
     public List<String> convert(String inputFile, String outputDirectory, Boolean prettyPrinting) {
-        ArrayList<String> filenames = new ArrayList<>();
-        Boolean result = true;
+        ArrayList<String> convertedFiles = new ArrayList<>();
         try {
             FileInputStream xlsxFile = new FileInputStream(inputFile); // C:/test/input.xlsx
             XSSFWorkbook workbook = new XSSFWorkbook(xlsxFile);
@@ -73,10 +72,10 @@ public class XlsxToJsonService {
                     }
                     String jsonEntry;
                     //Converting to Json using GSON
-                    if(prettyPrinting){
+                    if (prettyPrinting) {
                         Gson prettyGson = gson.newBuilder().setPrettyPrinting().create();
                         jsonEntry = prettyGson.toJson(excelEntry);
-                    }else{
+                    } else {
                         jsonEntry = gson.toJson(excelEntry);
                     }
                     //Add rows to build up the sheet
@@ -91,7 +90,7 @@ public class XlsxToJsonService {
                     Boolean createdDirectory = directory.mkdir();
                 }
                 String outputFile = outputDirectory + "/" + jsonFileName + ".json";
-                filenames.add(jsonFileName + ".json");
+                convertedFiles.add(jsonFileName + ".json");
                 File file = new File(outputFile);
                 FileWriter fileWriter = new FileWriter(file);
                 fileWriter.write(jsonSheet.toString());
@@ -100,6 +99,6 @@ public class XlsxToJsonService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return filenames;
+        return convertedFiles;
     }
 }
