@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,16 +25,20 @@ public class ToJsonController {
         String fileName = request.getFile_name();
         Boolean prettyPrinting = request.getPrettyPrinting();
         String outputDirectory = request.getResult_directory();
-        List<String> outputFiles = xlsxToJsonService.convert(filePath + "/" + fileName, outputDirectory, prettyPrinting);
-        Response response = new Response(outputFiles, outputDirectory, prettyPrinting);
         ResponseEntity<Response> responseEntity;
-        if (outputFiles.size() > 0) {
-
+        List<String> outputFiles;
+        Response response;
+        try {
+            outputFiles = xlsxToJsonService.convert(filePath + "/" + fileName, outputDirectory, prettyPrinting);
+            response = new Response(outputFiles, outputDirectory, prettyPrinting,"");
             responseEntity = ResponseEntity.ok()
                     .body(response);
-        } else {
+        } catch (IOException e) {
+            e.printStackTrace();
+            outputFiles = new ArrayList<>();
+            response = new Response(outputFiles, outputDirectory, prettyPrinting,e.getMessage());
             responseEntity = ResponseEntity.badRequest()
-                    .build();
+                    .body(response);
         }
         return responseEntity;
     }

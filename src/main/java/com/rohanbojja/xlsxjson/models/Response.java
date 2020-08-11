@@ -6,11 +6,13 @@ public class Response {
     List<String> file_names;
     String result_directory;
     Boolean prettyPrinting;
+    String errorMessage;
 
-    public Response(List<String> file_names, String result_directory, Boolean prettyPrinting) {
+    public Response(List<String> file_names, String result_directory, Boolean prettyPrinting, String errorMessage) {
         this.file_names = file_names;
         this.result_directory = result_directory;
         this.prettyPrinting = prettyPrinting;
+        this.errorMessage = errorMessage;
     }
 
     public List<String> getFile_names() {
@@ -35,5 +37,13 @@ public class Response {
 
     public void setPrettyPrinting(Boolean prettyPrinting) {
         this.prettyPrinting = prettyPrinting;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }
